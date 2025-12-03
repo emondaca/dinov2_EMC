@@ -1,0 +1,68 @@
+dino:
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_hidden_dim: 2048
+  head_nlayers: 3
+  loss_weight: 1.0
+  koleo_loss_weight: 0.1
+ibot:
+  loss_weight: 1.0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: true
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_hidden_dim: 2048
+  head_nlayers: 3
+train:
+  batch_size_per_gpu: 64
+  dataset_path: HuggingFace:root=tsbpp/fall2025_deeplearning:split=train
+  centering: sinkhorn_knopp
+  output_dir: /gpfs/data/shenlab/aj4718/dinov2/logs/vits14_pyramid
+  OFFICIAL_EPOCH_LENGTH: 7813
+  num_workers: 4
+  saveckp_freq: 1
+student:
+  arch: vit_small
+  patch_size: 16
+  drop_path_rate: 0.4
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  ffn_layer: mlp
+  block_chunks: 0
+teacher:
+  momentum_teacher: 0.994
+  final_momentum_teacher: 1.0
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  epochs: 300
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.002
+  lr: 0.0  # will be set by apply_scaling_rules_to_cfg
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  adamw_beta1: 0.9
+  adamw_beta2: 0.999
+crops:
+  global_crops_scale:
+  - 0.32
+  - 1.0
+  local_crops_number: 8
+  local_crops_scale:
+  - 0.05
+  - 0.32
+  global_crops_size: 96
+  local_crops_size: 48
+evaluation:
+  eval_period_iterations: 10000
