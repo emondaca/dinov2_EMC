@@ -10,7 +10,7 @@ from typing import Any, Dict, Optional
 import torch
 from torch import Tensor
 from torchmetrics import Metric, MetricCollection
-from torchmetrics.classification import MulticlassAccuracy
+from torchmetrics.classification import MulticlassAccuracy, MulticlassF1Score, MultilabelF1Score
 from torchmetrics.utilities.data import dim_zero_cat, select_topk
 
 
@@ -22,6 +22,8 @@ class MetricType(Enum):
     MEAN_PER_CLASS_ACCURACY = "mean_per_class_accuracy"
     PER_CLASS_ACCURACY = "per_class_accuracy"
     IMAGENET_REAL_ACCURACY = "imagenet_real_accuracy"
+    MEAN_PER_CLASS_MULTICLASS_F1 = "mean_per_class_multiclass_f1"
+    MEAN_PER_CLASS_MULTILABEL_F1 = "mean_per_class_multilabel_f1"
 
     @property
     def accuracy_averaging(self):
@@ -52,6 +54,10 @@ def build_metric(metric_type: MetricType, *, num_classes: int, ks: Optional[tupl
             num_classes=num_classes,
             ks=(1, 5) if ks is None else ks,
         )
+    elif metric_type == MetricType.MEAN_PER_CLASS_MULTILABEL_F1:
+        return MetricCollection({"top-1": MultilabelF1Score(num_labels=int(num_classes), average="macro")})
+    elif metric_type == MetricType.MEAN_PER_CLASS_MULTICLASS_F1:
+        return MetricCollection({"top-1": MulticlassF1Score(num_classes=int(num_classes), average="macro")})
 
     raise ValueError(f"Unknown metric type {metric_type}")
 

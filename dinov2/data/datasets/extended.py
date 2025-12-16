@@ -7,11 +7,17 @@ from typing import Any, Tuple
 
 from torchvision.datasets import VisionDataset
 
-from .decoders import TargetDecoder, ImageDataDecoder
+from .decoders import DecoderType, TargetDecoder
 
 
 class ExtendedVisionDataset(VisionDataset):
     def __init__(self, *args, **kwargs) -> None:
+        image_decoder_type = kwargs.pop("image_decoder_type", DecoderType.ImageDataDecoder)
+        self._decoder_params = {}
+        self._image_decoder_class = image_decoder_type.get_class()
+        if "image_decoder_params" in kwargs:
+            self._decoder_params = kwargs.pop("image_decoder_params")
+
         super().__init__(*args, **kwargs)  # type: ignore
 
     def get_image_data(self, index: int) -> bytes:
@@ -23,7 +29,7 @@ class ExtendedVisionDataset(VisionDataset):
     def __getitem__(self, index: int) -> Tuple[Any, Any]:
         try:
             image_data = self.get_image_data(index)
-            image = ImageDataDecoder(image_data).decode()
+            image = self._image_decoder_class(image_data, **self._decoder_params).decode()
         except Exception as e:
             raise RuntimeError(f"can not read image for sample {index}") from e
         target = self.get_target(index)

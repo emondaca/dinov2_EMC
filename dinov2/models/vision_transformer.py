@@ -66,6 +66,7 @@ class DinoVisionTransformer(nn.Module):
         num_register_tokens=0,
         interpolate_antialias=False,
         interpolate_offset=0.1,
+        channel_adaptive=False,
     ):
         """
         Args:
@@ -103,6 +104,7 @@ class DinoVisionTransformer(nn.Module):
         self.num_register_tokens = num_register_tokens
         self.interpolate_antialias = interpolate_antialias
         self.interpolate_offset = interpolate_offset
+        self.bag_of_channels = channel_adaptive
 
         self.patch_embed = embed_layer(img_size=img_size, patch_size=patch_size, in_chans=in_chans, embed_dim=embed_dim)
         num_patches = self.patch_embed.num_patches
@@ -304,6 +306,11 @@ class DinoVisionTransformer(nn.Module):
         return_class_token: bool = False,
         norm=True,
     ) -> Tuple[Union[torch.Tensor, Tuple[torch.Tensor]]]:
+
+        if self.bag_of_channels:
+            B, C, H, W = x.shape
+            x = x.reshape(B * C, 1, H, W)  # passing channels to batch dimension to get encodings for each channel
+
         if self.chunked_blocks:
             outputs = self._get_intermediate_layers_chunked(x, n)
         else:
@@ -318,6 +325,22 @@ class DinoVisionTransformer(nn.Module):
                 out.reshape(B, w // self.patch_size, h // self.patch_size, -1).permute(0, 3, 1, 2).contiguous()
                 for out in outputs
             ]
+
+        if self.bag_of_channels:
+            output = tuple(zip(outputs, class_tokens))
+            output = list(
+                zip(*output)
+            )  # unzip the tuple: (list of patch_tokens per block, list of class tokens per block)
+            patch_tokens_per_block = output[0]  # [BLOCK1, BLOCK2, ...] where BLOCK1.shape: B*C, N, D
+            cls_tokens_per_block = output[1]  # [BLOCK1, BLOCK2, ...] where BLOCK1.shape: B*C, D
+            patch_tokens_per_block = [
+                patch_tokens.reshape(B, C, patch_tokens.shape[-2], patch_tokens.shape[-1])
+                for patch_tokens in patch_tokens_per_block
+            ]  # [BLOCK1, BLOCK2, ...] where BLOCK1.shape: B, C, N, D
+            cls_tokens_per_block = [cls_tokens.reshape(B, -1) for cls_tokens in cls_tokens_per_block]
+            output = tuple(zip(patch_tokens_per_block, cls_tokens_per_block))
+            return output
+
         if return_class_token:
             return tuple(zip(outputs, class_tokens))
         return tuple(outputs)
@@ -338,7 +361,7 @@ def init_weights_vit_timm(module: nn.Module, name: str = ""):
             nn.init.zeros_(module.bias)
 
 
-def vit_small(patch_size=16, num_register_tokens=0, **kwargs):
+def vit_small(patch_size=16, num_register_tokens=0, in_chans=3, channel_adaptive=False, **kwargs):
     model = DinoVisionTransformer(
         patch_size=patch_size,
         embed_dim=384,
@@ -347,12 +370,14 @@ def vit_small(patch_size=16, num_register_tokens=0, **kwargs):
         mlp_ratio=4,
         block_fn=partial(Block, attn_class=MemEffAttention),
         num_register_tokens=num_register_tokens,
+        in_chans=in_chans,
+        channel_adaptive=channel_adaptive,
         **kwargs,
     )
     return model
 
 
-def vit_base(patch_size=16, num_register_tokens=0, **kwargs):
+def vit_base(patch_size=16, num_register_tokens=0, in_chans=3, channel_adaptive=False, **kwargs):
     model = DinoVisionTransformer(
         patch_size=patch_size,
         embed_dim=768,
@@ -361,12 +386,14 @@ def vit_base(patch_size=16, num_register_tokens=0, **kwargs):
         mlp_ratio=4,
         block_fn=partial(Block, attn_class=MemEffAttention),
         num_register_tokens=num_register_tokens,
+        in_chans=in_chans,
+        channel_adaptive=channel_adaptive,
         **kwargs,
     )
     return model
 
 
-def vit_large(patch_size=16, num_register_tokens=0, **kwargs):
+def vit_large(patch_size=16, num_register_tokens=0, in_chans=3, channel_adaptive=False, **kwargs):
     model = DinoVisionTransformer(
         patch_size=patch_size,
         embed_dim=1024,
@@ -375,12 +402,14 @@ def vit_large(patch_size=16, num_register_tokens=0, **kwargs):
         mlp_ratio=4,
         block_fn=partial(Block, attn_class=MemEffAttention),
         num_register_tokens=num_register_tokens,
+        in_chans=in_chans,
+        channel_adaptive=channel_adaptive,
         **kwargs,
     )
     return model
 
 
-def vit_giant2(patch_size=16, num_register_tokens=0, **kwargs):
+def vit_giant2(patch_size=16, num_register_tokens=0, in_chans=3, channel_adaptive=False, **kwargs):
     """
     Close to ViT-giant, with embed-dim 1536 and 24 heads => embed-dim per head 64
     """
@@ -392,6 +421,8 @@ def vit_giant2(patch_size=16, num_register_tokens=0, **kwargs):
         mlp_ratio=4,
         block_fn=partial(Block, attn_class=MemEffAttention),
         num_register_tokens=num_register_tokens,
+        in_chans=in_chans,
+        channel_adaptive=channel_adaptive,
         **kwargs,
     )
     return model
