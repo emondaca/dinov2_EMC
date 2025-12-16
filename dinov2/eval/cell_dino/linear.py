@@ -376,7 +376,7 @@ def make_eval_data_loader(
     num_workers,
 ):
     if isinstance(test_dataset_str_or_path_or_loo_dataset, str):
-        logger.info(f"Loading dataset {test_dataset_str_or_path_or_loo_dataset}")
+        logger.info(f'Loading dataset {test_dataset_str_or_path_or_loo_dataset}')
         transform = make_classification_eval_cell_transform(
             normalization_type=NormalizationType.SELF_NORM_CENTER_CROP,
             resize_size=config["resize_size"],
@@ -386,7 +386,7 @@ def make_eval_data_loader(
         test_dataset = make_dataset(dataset_str=test_dataset_str_or_path_or_loo_dataset, transform=transform)
         collate_fn = None
     else:
-        logger.info(f'Making data loader for feature dataset (typical in leave one out evaluation)')
+        logger.info(f"Making data loader for feature dataset (typical in leave one out evaluation)")
         test_dataset = test_dataset_str_or_path_or_loo_dataset
         collate_fn = None
     class_mapping = None

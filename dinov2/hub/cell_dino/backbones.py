@@ -8,8 +8,6 @@ from typing import Optional, Union
 
 import torch
 
-from ..utils import _DINOV2_BASE_URL, _make_dinov2_model_name
-
 
 class Weights(Enum):
     CELL_DINO = "CELL-DINO"

@@ -452,7 +452,6 @@ def pad_multilabel_and_collate(batch, pad_value=-1):
     return torch.utils.data.default_collate(padded_batch)
 
 
-
 class KnnModule(torch.nn.Module):
     """
     Gets knn of test features from all processes on a chunk of the train features
@@ -473,8 +472,6 @@ class KnnModule(torch.nn.Module):
         self.train_features_rank_T = train_features.chunk(self.global_size)[self.global_rank].T.to(self.device)
         # Labels can either be integers, or in a one-hot format
         self.candidates = train_labels.chunk(self.global_size)[self.global_rank].unsqueeze(0).to(self.device)
-        #self.candidates = train_labels.chunk(self.global_size)[self.global_rank].view(1, -1).to(self.device)
-
         self.nb_knn = nb_knn
         self.max_k = max(self.nb_knn)
         self.T = T

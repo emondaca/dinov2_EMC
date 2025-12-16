@@ -137,6 +137,7 @@ def _list_images_from_csv(img_path, csv_path):
             L.append(os.path.join(img_path, row["ID"] + ".png"))
     return L
 
+
 def _load_file_names_and_labels_ssl(
     root: str,
 ) -> Tuple[List[str], List[Any]]:
@@ -193,7 +194,9 @@ def _load_file_names_and_labels(
                 if os.path.exists(candidate_path):
                     image_paths.append(candidate_path)
                 else:
-                    candidate_path = os.path.join(data_path, row["file"].split("/")[-1].split(".")[0] + ".tiff") #_blue.png") # some images on the normalized_data folder have a _blue suffix on their names
+                    candidate_path = os.path.join(
+                        data_path, row["file"].split("/")[-1].split(".")[0] + ".tiff"
+                    )  # _blue.png") # some images on the normalized_data folder have a _blue suffix on their names
                     if os.path.exists(candidate_path):
                         image_paths.append(candidate_path)
                     else:

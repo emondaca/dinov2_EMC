@@ -93,7 +93,7 @@ def _simple_parse_csv(img_rootdir, csv_filepath: str):
     samples = []
     with open(csv_filepath) as filename:
         template = csv.DictReader(filename)
-        samples = [(os.path.join(img_rootdir , row["img_path"]), 0) for row in template]
+        samples = [(os.path.join(img_rootdir, row["img_path"]), 0) for row in template]
     return samples
 
 
