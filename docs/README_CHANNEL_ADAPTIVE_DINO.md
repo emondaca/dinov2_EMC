@@ -13,7 +13,7 @@ PyTorch implementation and pretrained model for ChannelAdaptive-DINO.
 
 The contents of this repo, including the code and model weights, are intended for research use only. It is not for use in medical procedures, including any diagnostics, treatment, or curative applications. Do not use this model for any clinical purpose or as a substitute for professional medical judgement.
 
-![teaser](https://github.com/se-yi/dinov2-bio/blob/rebased_channel_adaptive_dino/ChannelAdaptiveDINO.png)
+![teaser](ChannelAdaptiveDINO.png)
 
 ## Pretrained model
 
