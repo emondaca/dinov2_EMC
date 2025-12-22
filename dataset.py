@@ -272,6 +272,7 @@ def get_data(data_filtered, images_src,RadDino_src,RadDinoWeights, subLabel, IMA
 
         print("Label Number Types: ", label_output_count)
 
+
     # Group labels by ImageID
     if subLabel:
         data_grouped = (

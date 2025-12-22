@@ -58,6 +58,7 @@ def build_phrase_regex(terms):
     pattern = re.compile(r'(?:' + '|'.join(parts) + r')', flags=re.IGNORECASE)
     return pattern
 
+
 # === Use the functions ===
 def clean_suspects_terms(xlsx_path=""):
     terms_to_remove = load_terms_from_excel(xlsx_path, column='term', normalize=True)

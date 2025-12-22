@@ -5,6 +5,7 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+
 def evaluate_model(model, test_loader, eval_test = False, criterion = None):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model.to(device)

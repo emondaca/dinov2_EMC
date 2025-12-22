@@ -13,6 +13,7 @@ def ensure_pil_uint8(img):
         img = to_pil_image(img)
     return img
 
+
 def patch_image(x):
 
     B, C, H, W = x.shape
