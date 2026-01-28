@@ -68,6 +68,7 @@ train:
   OFFICIAL_EPOCH_LENGTH: 1250
   cache_dataset: true
   centering: "centering" # or "sinkhorn_knopp"
+  cell_augmentation: false
 student:
   arch: vit_large
   patch_size: 16
@@ -83,12 +84,16 @@ student:
   num_register_tokens: 0
   interpolate_antialias: false
   interpolate_offset: 0.1
+  in_chans: 3
+  channel_adaptive: false
 teacher:
   momentum_teacher: 0.992
   final_momentum_teacher: 1
   warmup_teacher_temp: 0.04
   teacher_temp: 0.07
   warmup_teacher_temp_epochs: 30
+  in_chans: 3
+  channel_adaptive: false
 optim:
   epochs: 100
   weight_decay: 0.04

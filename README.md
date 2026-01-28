@@ -1,4 +1,14 @@
-:new: [2023-10-26] *Added DINOv2 backbones with registers, following [Vision Transformers Need Registers](https://arxiv.org/abs/2309.16588).*
+:new: [2025-12-18] *Added support for loading XRay-DINO backbone following [Advancing human-centric AI for robust X-ray analysis through holistic self-supervised learning](https://arxiv.org/pdf/2405.01469), more details are [here](#pretrained-backbone-xray-dino)*
+
+:new: [2025-12-16] *Added Channel-Adaptive DINO code following [Scaling Channel-Adaptive Self-Supervised Learning](https://openreview.net/forum?id=pT8sgtRVAf), more details are [here](#dinov2-for-biology)*
+
+:new: [2025-12-16] *Added Cell-DINO code following [Cell-DINO: Self-Supervised Image-based Embeddings for Cell Fluorescent Microscopy](to appear in Plos One Computational Biology), more details are [here](#dinov2-for-biology)*
+
+[2025-08-14] *Please check out the more recent [DINOv3](https://github.com/facebookresearch/dinov3) effort continuing this line of work.*
+
+[2025-06-11] *Added dino.txt inference code, following [DINOv2 Meets Text: A Unified Framework for Image- and Pixel-Level Vision-Language Alignment](https://arxiv.org/abs/2412.16334).*
+
+[2023-10-26] *Added DINOv2 backbones with registers, following [Vision Transformers Need Registers](https://arxiv.org/abs/2309.16588).*
 
 # DINOv2: Learning Robust Visual Features without Supervision
 
@@ -128,6 +138,27 @@ dinov2_vitb14_reg = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitb14_reg
 dinov2_vitl14_reg = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14_reg')
 dinov2_vitg14_reg = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitg14_reg')
 ```
+
+### Pretrained backbone: XRay-DINO
+
+Request for downloading the model is here:
+
+https://ai.meta.com/resources/models-and-libraries/raydino-downloads/
+
+
+After filling the form, you will get an email with a temporary link. You can either download it using `wget` and indicate the checkpoint path in your local filesystem, or you can directly use the URL from the email in the following code:
+
+```python
+import torch
+
+REPO_DIR = <PATH/TO/A/LOCAL/DIRECTORY/WHERE/THE/DINOV2/REPO/WAS/CLONED>
+
+xray_dino_vitl16 = torch.hub.load(REPO_DIR, 'xray_dino_vitl16', source='local', weights=<CHECKPOINT/URL/OR/PATH>)
+```
+
+**License**
+Model weights are released under the FAIR Noncommercial Research License. See LICENSE_XRAY_DINO_MODEL for additional details.
+
 
 ### Pretrained heads - Image classification
 
@@ -359,6 +390,41 @@ dinov2_vitg14_reg_lc = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitg14_
     </tr>
   </tbody>
 </table>
+
+
+### Pretrained heads - Zero-shot tasks with dino.txt
+
+<table style="margin: auto">
+  <thead>
+    <tr>
+      <th rowspan="2">backbone</th>
+      <th rowspan="2">with<br />registers</th>
+      <th>download</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ViT-L/14 distilled</td>
+      <td align="center">:white_check_mark:</td>
+      <td>
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_reg4_dinotxt_tet1280d20h24l_vision_head.pth">vision head</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_reg4_dinotxt_tet1280d20h24l_text_encoder.pth">text model</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/thirdparty/bpe_simple_vocab_16e6.txt.gz">vocabulary</a>,
+        <a href="https://dl.fbaipublicfiles.com/dinov2/thirdparty/LICENSE">vocabulary license</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+The (full) dino.txt model can be loaded via PyTorch Hub:
+
+```python
+import torch
+
+# DINOv2
+dinov2_vitl14_reg4_dinotxt_tet1280d20h24l = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14_reg4_dinotxt_tet1280d20h24l')
+```
+
 
 ## Installation
 
@@ -618,3 +684,74 @@ If you find this repository useful, please consider giving a star :star: and cit
   year={2023}
 }
 ```
+
+```
+@misc{jose2024dinov2meetstextunified,
+  title={DINOv2 Meets Text: A Unified Framework for Image- and Pixel-Level Vision-Language Alignment},
+  author={Cijo Jose and Théo Moutakanni and Dahyun Kang and Federico Baldassarre and Timothée Darcet and Hu Xu and Daniel Li and Marc Szafraniec and Michaël Ramamonjisoa and Maxime Oquab and Oriane Siméoni and Huy V. Vo and Patrick Labatut and Piotr Bojanowski},
+  journal={arXiv:2412.16334},
+  year={2024}
+}
+```
+
+
+# DINOv2 for Biology
+
+The contents of the source code contained in the cell_dino folders, including the code and model weights, are intended for research use only. It is not for use in medical procedures, including any diagnostics, treatment, or curative applications. Do not use this model for any clinical purpose or as a substitute for professional medical judgement.
+
+
+## Scaling Channel-Adaptive Self-Supervised Learning (Channel-Adaptive DINO)
+
+ [[`Paper `](https://openreview.net/forum?id=pT8sgtRVAf))] [[`BibTeX`](#citing-channeladaptivedino-and-dinov2)]
+
+Alice V. De Lorenci, Seungeun Yi, Théo Moutakanni, Piotr Bojanowski, Camille Couprie, Juan C. Caicedo, Wolfgang M. Pernice,
+
+with special thanks to Elouan Gardes for his contributions to the codebase.
+
+ [README](https://github.com/facebookresearch/dinov2/blob/main/docs/README_CHANNEL_ADAPTIVE_DINO.md)
+
+
+
+## Cell-DINO: Self-Supervised Image-based Embeddings for Cell Fluorescent Microscopy (Cell-DINO)
+
+Théo Moutakanni, Camille Couprie, Seungeun Yi, Elouan Gardes, Piotr Bojanowski, Hugo Touvron, Michael Doron, Zitong S. Chen, Nikita Moshkov, Mathilde Caron, Armand Joulin,  Wolfgang M. Pernice, Juan C. Caicedo
+
+to appear soon.
+
+ [README](https://github.com/facebookresearch/dinov2/blob/main/docs/README_CELL_DINO.md)
+
+
+## Pretrained models
+
+ℹ️ Please follow the link provided below to get access to all the model weights: once accepted, an e-mail will be sent with the complete list of URLs pointing to all the available model weights. These URLs can then be used to either:
+
+- download the model or adapter weights to a local filesystem and point `torch.hub.load()` to these local weights via the `pretrained_path` parameters, or
+- directly invoke `torch.hub.load()` to download and load a backbone from its URL via also the `pretrained_url` parameter.
+
+⚠️ Please use wget instead of a web browser to download the weights.
+
+**Download link:**
+https://ai.meta.com/resources/models-and-libraries/cell-dino-downloads/
+
+```python
+import torch
+
+REPO_DIR = <PATH/TO/A/LOCAL/DIRECTORY/WHERE/THE/DINOV2/REPO/WAS/CLONED>
+
+# You can either download the URL link first, then load:
+cell_dino_vits8 = torch.hub.load(REPO_DIR, 'cell_dino_cp_vits8', source='local', pretrained_path=<CHECKPOINT/PATH>)
+# Or directly download the URL while using `torch.hub.load`:
+cell_dino_vits8 = torch.hub.load(REPO_DIR, 'cell_dino_cp_vits8', source='local', pretrained_url=<CHECKPOINT/URL>)
+
+# Similarily for other models:
+cell_dino_vitl16_hpa_sc = torch.hub.load(REPO_DIR, 'cell_dino_hpa_vitl16', source='local', pretrained_path=<CHECKPOINT/PATH>)
+cell_dino_vitl16_hpa_fov = torch.hub.load(REPO_DIR, 'cell_dino_hpa_vitl16', source='local', pretrained_path=<CHECKPOINT/PATH>)
+channel_adaptive_dino_vitl16 = torch.hub.load(REPO_DIR, 'channel_adaptive_dino_vitl16', source='local', pretrained_path=<CHECKPOINT/PATH>)
+cell_dino_vitl14 = torch.hub.load(REPO_DIR, 'cell_dino_hpa_vitl14', source='local', pretrained_path=<CHECKPOINT/PATH>)
+```
+
+
+ ## Licenses
+
+ Code is released under the CC BY NC License. See [LICENSE_CELL_DINO_CODE](LICENSE_CELL_DINO_CODE) for additional details.
+ Model weights are released under the FAIR Noncommercial Research License. See [LICENSE_CELL_DINO_CODE_WEIGHTS](LICENSE_CELL_DINO_CODE_WEIGHTS) for additional details.
