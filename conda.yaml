@@ -1,22 +1,24 @@
 name: dinov2
 channels:
-  - defaults
   - pytorch
   - nvidia
-  - xformers
   - conda-forge
+  - rapidsai
 dependencies:
-  - python=3.9
-  - pytorch::pytorch=2.0.0
-  - pytorch::pytorch-cuda=11.7.0
-  - pytorch::torchvision=0.15.0
+  - python=3.10
+  - pip
+  - pytorch=2.0.0
+  - pytorch-cuda=11.7
+  - cuda-version=11.7
+  - torchvision=0.15.0
+  - mkl=2024.0.0
+  - numpy<2
+  - setuptools<81
   - omegaconf
   - torchmetrics=0.10.3
   - fvcore
   - iopath
-  - xformers::xformers=0.0.18
-  - pip
+  - cuml=24.02
   - pip:
-    - git+https://github.com/facebookincubator/submitit
-    - --extra-index-url https://pypi.nvidia.com
-    - cuml-cu11
+      - xformers==0.0.18
+      - submitit

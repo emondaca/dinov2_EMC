@@ -61,9 +61,19 @@ def get_args_parser(
         help="Partition where to submit",
     )
     parser.add_argument(
+        "--use-ampere80",
+        action="store_true",
+        help="Request A100-80GB GPUs",
+    )
+    parser.add_argument(
         "--use-volta32",
         action="store_true",
         help="Request V100-32GB GPUs",
+    )
+    parser.add_argument(
+        "--contiguous",
+        action="store_true",
+        help="Request contiguous nodes from Slurm",
     )
     parser.add_argument(
         "--comment",
@@ -97,12 +107,17 @@ def submit_jobs(task_class, args, name: str):
     executor = submitit.AutoExecutor(folder=args.output_dir, slurm_max_num_timeout=30)
 
     kwargs = {}
+    if args.use_ampere80:
+        kwargs["slurm_constraint"] = "ampere80gb"
     if args.use_volta32:
         kwargs["slurm_constraint"] = "volta32gb"
     if args.comment:
         kwargs["slurm_comment"] = args.comment
     if args.exclude:
         kwargs["slurm_exclude"] = args.exclude
+    if args.contiguous:
+        kwargs["slurm_additional_parameters"] = {"contiguous": True}
+
 
     executor_params = get_slurm_executor_parameters(
         nodes=args.nodes,
