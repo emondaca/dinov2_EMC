@@ -228,9 +228,10 @@ def eval_knn_with_leave_one_out(
     logger.info("Start the k-NN classification.")
 
     eval_metrics_dict = {}
-    postprocessors, metrics = {k: DictKeysModule([k]) for k in nb_knn}, {
-        k: metric_collection.clone().to(device) for k in nb_knn
-    }
+    postprocessors, metrics = (
+        {k: DictKeysModule([k]) for k in nb_knn},
+        {k: metric_collection.clone().to(device) for k in nb_knn},
+    )
     for metric_key in metrics.keys():
         metrics[metric_key] = metrics[metric_key].to(device)
 
@@ -427,9 +428,10 @@ def eval_knn(
         train_features, train_labels = train_data_dict[try_]["train_features"], train_data_dict[try_]["train_labels"]
         k_list = sorted(set([el if el < len(train_features) else len(train_features) for el in nb_knn]))
         knn_module = partial_knn_module(train_features=train_features, train_labels=train_labels, nb_knn=k_list)
-        postprocessors, metrics = {k: DictKeysModule([k]) for k in k_list}, {
-            k: metric_collection.clone() for k in k_list
-        }
+        postprocessors, metrics = (
+            {k: DictKeysModule([k]) for k in k_list},
+            {k: metric_collection.clone() for k in k_list},
+        )
         _, eval_metrics, _ = evaluate_with_accumulate(
             SequentialWithKwargs(model, knn_module),
             test_data_loader,

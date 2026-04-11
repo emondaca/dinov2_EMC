@@ -190,7 +190,7 @@ class PatchMerging(BaseModule):
                     (Merged_H, Merged_W).
         """
         B, L, C = x.shape
-        assert isinstance(input_size, Sequence), f"Expect " f"input_size is " f"`Sequence` " f"but get {input_size}"
+        assert isinstance(input_size, Sequence), f"Expect input_size is `Sequence` but get {input_size}"
 
         H, W = input_size
         assert L == H * W, "input feature has wrong size"
@@ -276,7 +276,7 @@ class FFN(BaseModule):
         **kwargs,
     ):
         super().__init__(init_cfg)
-        assert num_fcs >= 2, "num_fcs should be no less " f"than 2. got {num_fcs}."
+        assert num_fcs >= 2, f"num_fcs should be no less than 2. got {num_fcs}."
         self.embed_dims = embed_dims
         self.feedforward_channels = feedforward_channels
         self.num_fcs = num_fcs
@@ -374,7 +374,7 @@ class DetrTransformerEncoder(TransformerLayerSequence):
         if post_norm_cfg is not None:
             self.post_norm = build_norm_layer(post_norm_cfg, self.embed_dims)[1] if self.pre_norm else None
         else:
-            assert not self.pre_norm, f"Use prenorm in " f"{self.__class__.__name__}," f"Please specify post_norm_cfg"
+            assert not self.pre_norm, f"Use prenorm in {self.__class__.__name__},Please specify post_norm_cfg"
             self.post_norm = None
 
     def forward(self, *args, **kwargs):

@@ -43,7 +43,7 @@ class SinePositionalEncoding(BaseModule):
         super(SinePositionalEncoding, self).__init__(init_cfg)
         if normalize:
             assert isinstance(scale, (float, int)), (
-                "when normalize is set," "scale should be provided and in float or int type, " f"found {type(scale)}"
+                f"when normalize is set,scale should be provided and in float or int type, found {type(scale)}"
             )
         self.num_feats = num_feats
         self.temperature = temperature

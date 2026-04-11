@@ -164,7 +164,6 @@ def _load_file_names_and_labels(
     with open(csv_fpath) as filename:
         reader = csv.DictReader(filename)
         for row in reader:
-
             add_sample = True
             if mode != _Mode.PROTEIN_LOCALIZATION.value.upper():
                 # categorical

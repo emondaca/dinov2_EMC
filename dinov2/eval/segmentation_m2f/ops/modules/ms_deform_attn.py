@@ -71,7 +71,7 @@ class MSDeformAttn(nn.Module):
         """
         super().__init__()
         if d_model % n_heads != 0:
-            raise ValueError("d_model must be divisible by n_heads, " "but got {} and {}".format(d_model, n_heads))
+            raise ValueError("d_model must be divisible by n_heads, but got {} and {}".format(d_model, n_heads))
         _d_per_head = d_model // n_heads
         # you'd better set _d_per_head to a power of 2
         # which is more efficient in our CUDA implementation

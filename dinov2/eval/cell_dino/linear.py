@@ -951,7 +951,6 @@ def eval_linear_with_model(
     else:  # if leave one out is True
         test_results_dict = {}
         for loo_label in loo_dict.keys():
-
             checkpoint_output_dir, save_filename_suffix = os.path.join(output_dir, f"checkpoints_{loo_label}"), ""
             os.makedirs(checkpoint_output_dir, exist_ok=True)
 

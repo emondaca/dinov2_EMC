@@ -37,7 +37,7 @@ class ViTAdapter(TIMMVisionTransformer):
         use_cls=True,
         with_cp=False,
         *args,
-        **kwargs
+        **kwargs,
     ):
 
         super().__init__(num_heads=num_heads, pretrained=pretrained, with_cp=with_cp, *args, **kwargs)
