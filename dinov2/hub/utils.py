@@ -22,6 +22,7 @@ def _safe_load_state_dict_from_url(url: str, **kwargs):
         local_kwargs = kwargs
     return torch.hub.load_state_dict_from_url(url, **local_kwargs)
 
+
 def _make_dinov2_model_name(arch_name: str, patch_size: int, num_register_tokens: int = 0) -> str:
     compact_arch_name = arch_name.replace("_", "")[:4]
     registers_suffix = f"_reg{num_register_tokens}" if num_register_tokens else ""

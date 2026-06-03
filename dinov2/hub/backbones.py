@@ -8,8 +8,6 @@ from pathlib import Path
 from typing import Optional, Union
 from urllib.parse import urlparse
 
-import torch
-
 from .utils import _DINOV2_BASE_URL, _make_dinov2_model_name, _safe_load_state_dict_from_url
 
 

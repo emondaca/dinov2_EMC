@@ -3,7 +3,6 @@
 # This source code is licensed under the Apache License, Version 2.0
 # found in the LICENSE file in the root directory of this source tree.
 
-import torch
 import math
 
 from .backbones import dinov2_vitl14_reg
@@ -54,9 +53,9 @@ def dinov2_vitl14_reg4_dinotxt_tet1280d20h24l():
     model.visual_model.backbone = vision_backbone
     model.eval()
 
-    url = _DINOV2_BASE_URL + "/dinov2_vitl14/dinov2_vitl14_reg4_dinotxt_tet1280d20h24l_vision_head.pth",
+    url = _DINOV2_BASE_URL + "/dinov2_vitl14/dinov2_vitl14_reg4_dinotxt_tet1280d20h24l_vision_head.pth"
     visual_model_head_state_dict = _safe_load_state_dict_from_url(url, map_location="cpu")
-    url = _DINOV2_BASE_URL + "/dinov2_vitl14/dinov2_vitl14_reg4_dinotxt_tet1280d20h24l_text_encoder.pth",
+    url = _DINOV2_BASE_URL + "/dinov2_vitl14/dinov2_vitl14_reg4_dinotxt_tet1280d20h24l_text_encoder.pth"
     text_model_state_dict = _safe_load_state_dict_from_url(url, map_location="cpu")
     model.visual_model.head.load_state_dict(visual_model_head_state_dict, strict=True)
     model.text_model.load_state_dict(text_model_state_dict, strict=True)

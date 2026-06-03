@@ -7,8 +7,6 @@ from enum import Enum
 from functools import partial
 from typing import Optional, Tuple, Union
 
-import torch
-
 from .backbones import _make_dinov2_model
 from .depth import BNHead, DepthEncoderDecoder, DPTHead
 from .utils import _DINOV2_BASE_URL, _make_dinov2_model_name, _safe_load_state_dict_from_url, CenterPadding
