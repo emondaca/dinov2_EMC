@@ -35,7 +35,12 @@ class DINOLoss(nn.Module):
     def sinkhorn_knopp_teacher(self, teacher_output, teacher_temp, n_iterations=3):
         teacher_output = teacher_output.float()
         world_size = dist.get_world_size() if dist.is_initialized() else 1
-        Q = torch.exp(teacher_output / teacher_temp).t()  # Q is K-by-B for consistency with notations from our paper
+        # Subtract max for numerical stability before exp (log-sum-exp trick).
+        # This prevents overflow when teacher_temp is small (e.g., 0.04-0.07),
+        # which would otherwise scale logits by 14-25x and produce inf values.
+        # The subtraction cancels out after the subsequent normalization step.
+        teacher_output_scaled = teacher_output / teacher_temp
+        Q = torch.exp(teacher_output_scaled - teacher_output_scaled.max(dim=-1, keepdim=True).values).t()
         B = Q.shape[1] * world_size  # number of samples to assign
         K = Q.shape[0]  # how many prototypes
 
