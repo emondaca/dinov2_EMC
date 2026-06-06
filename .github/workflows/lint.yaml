@@ -25,14 +25,10 @@ jobs:
       - name: Install Python (development) dependencies
         run: |
           pip install -r requirements-dev.txt
-      - name: Run flake8
+      - name: Run ruff (lint)
         run: |
-          flake8
-      - name: Run black
+          ruff check dinov2
+      - name: Run ruff (format)
         if: always()
         run: |
-          black --check dinov2
-      - name: Run pylint
-        if: always()
-        run: |
-          pylint --exit-zero dinov2
+          ruff format --check dinov2

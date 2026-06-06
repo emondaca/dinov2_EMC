@@ -227,10 +227,10 @@ class DepthEncoderDecoder(nn.Module):
         """
         for var, name in [(imgs, "imgs"), (img_metas, "img_metas")]:
             if not isinstance(var, list):
-                raise TypeError(f"{name} must be a list, but got " f"{type(var)}")
+                raise TypeError(f"{name} must be a list, but got {type(var)}")
         num_augs = len(imgs)
         if num_augs != len(img_metas):
-            raise ValueError(f"num of augmentations ({len(imgs)}) != " f"num of image meta ({len(img_metas)})")
+            raise ValueError(f"num of augmentations ({len(imgs)}) != num of image meta ({len(img_metas)})")
         # all images in the same aug batch all of the same ori_shape and pad
         # shape
         for img_meta in img_metas:

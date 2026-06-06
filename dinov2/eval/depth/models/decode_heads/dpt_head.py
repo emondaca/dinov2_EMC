@@ -231,7 +231,7 @@ class DPTHead(DepthBaseDecodeHead):
         readout_type="ignore",
         patch_size=16,
         expand_channels=False,
-        **kwargs
+        **kwargs,
     ):
         super(DPTHead, self).__init__(**kwargs)
 

@@ -142,7 +142,7 @@ class MaskHungarianAssigner(BaseAssigner):
         # 3. do Hungarian matching on CPU using linear_sum_assignment
         cost = cost.detach().cpu()
         if linear_sum_assignment is None:
-            raise ImportError('Please run "pip install scipy" ' "to install scipy first.")
+            raise ImportError('Please run "pip install scipy" to install scipy first.')
 
         matched_row_inds, matched_col_inds = linear_sum_assignment(cost)
         matched_row_inds = torch.from_numpy(matched_row_inds).to(cls_pred.device)

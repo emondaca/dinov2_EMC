@@ -119,11 +119,11 @@ def binary_cross_entropy(
     if pred.size(1) == 1:
         # For binary class segmentation, the shape of pred is
         # [N, 1, H, W] and that of label is [N, H, W].
-        assert label.max() <= 1, "For pred with shape [N, 1, H, W], its label must have at " "most 2 classes"
+        assert label.max() <= 1, "For pred with shape [N, 1, H, W], its label must have at most 2 classes"
         pred = pred.squeeze()
     if pred.dim() != label.dim():
         assert (pred.dim() == 2 and label.dim() == 1) or (pred.dim() == 4 and label.dim() == 3), (
-            "Only pred shape [N, C], label shape [N] or pred shape [N, C, " "H, W], label shape [N, H, W] are supported"
+            "Only pred shape [N, C], label shape [N] or pred shape [N, C, H, W], label shape [N, H, W] are supported"
         )
         # `weight` returned from `_expand_onehot_labels`
         # has been treated for valid (non-ignore) pixels
